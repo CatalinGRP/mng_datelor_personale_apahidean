@@ -1,5 +1,66 @@
-•	<script> document.cookie = "session=test GDPR"; document.cookie = 
-  "favorite_task=collect Data"; function alertCookie() { alert(document.cookie); } 
-</script>
-•	<body> Bine ai venit la lab <button onclick="alertCookie()">Show cookies</button> 
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab 8-9: Testare Cookies (MDN)</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+        button { margin: 5px; padding: 10px; cursor: pointer; border-radius: 5px; border: 1px solid #333; }
+        .sectiune { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; background-color: #f9f9f9; }
+    </style>
+    
+    <script>
+        // --- Task 3: Codul de bază din cerință ---
+        document.cookie = "favorite_task=collect Data";
+        
+        function alertCookie() { 
+            alert("Toate cookie-urile curente:\n\n" + document.cookie); 
+        }
+
+        // --- Exerciții din ghidul Mozilla (MDN) ---
+        
+        // 1. Creare cookie simplu (expiră la închiderea browserului)
+        function setSimpleCookie() {
+            document.cookie = "user=Student_UTCN";
+            alert("Cookie creat cu succes: user=Student_UTCN");
+        }
+
+        // 2. Creare cookie cu valabilitate (max-age în secunde - ex: valabil 1 an)
+        function setMaxAgeCookie() {
+            document.cookie = "tema=dark; max-age=31536000";
+            alert("Cookie creat: tema=dark (Valabil 1 an prin max-age)");
+        }
+
+        // 3. Creare cookie cu o dată de expirare exactă (expires)
+        function setExpiresCookie() {
+            document.cookie = "sesiune=activa; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+            alert("Cookie creat: sesiune=activa (Expiră în anul 9999 prin expires)");
+        }
+
+        // 4. Ștergerea unui cookie (se face setând max-age la 0 sau o dată din trecut)
+        function deleteCookie() {
+            document.cookie = "user=; max-age=0";
+            alert("Cookie-ul 'user' a fost șters!");
+        }
+    </script>
+</head>
+<body>
+    <h1>Bine ai venit la lab - Managementul Datelor</h1>
+    <p>Această pagină demonstrează modul de funcționare a API-ului <code>document.cookie</code> în JavaScript, conform documentației MDN.</p>
+
+    <div class="sectiune">
+        <h3>Task 3: Afișare Cookies</h3>
+        <p>Apasă butonul de mai jos pentru a citi și afișa toate cookie-urile stocate de această pagină (inclusiv cel setat la încărcare: <i>favorite_task</i>).</p>
+        <button onclick="alertCookie()" style="background-color: #e0f7fa;">Show cookies</button>
+    </div>
+
+    <div class="sectiune">
+        <h3>Exerciții practice MDN Web APIs</h3>
+        <button onclick="setSimpleCookie()">1. Setează Cookie Simplu</button>
+        <button onclick="setMaxAgeCookie()">2. Setează Cookie cu Max-Age</button>
+        <button onclick="setExpiresCookie()">3. Setează Cookie cu Expires</button>
+        <br><br>
+        <button onclick="deleteCookie()" style="background-color: #ffcccc;">4. Șterge Cookie-ul 'user'</button>
+    </div>
 </body>
+</html>
