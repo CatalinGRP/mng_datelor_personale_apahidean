@@ -24,22 +24,22 @@
         // 1. Creare simplă
         function mdnCreeaza() {
             document.cookie = "test_mdn=Salut";
-            alert("MDN: Am creat cookie-ul -> test_mdn=Salut");
+            alert("Am creat cookie-ul -> test_mdn=Salut");
         }
 
         // 2. Creare cu expirare (Max-Age)
         function mdnCreeazaExpirare() {
             document.cookie = "tema=dark; max-age=3600";
-            alert("MDN: Am creat cookie-ul 'tema=dark' care expiră într-o oră.");
+            alert("Am creat cookie-ul 'tema=dark' care expiră într-o oră.");
         }
 
         // 3. Verificare dacă există (folosind .some din MDN)
         function mdnVerifica() {
             let exista = document.cookie.split('; ').some(item => item.startsWith('test_mdn='));
             if (exista) {
-                alert("MDN: DA! Cookie-ul 'test_mdn' există.");
+                alert("DA! Cookie-ul 'test_mdn' există.");
             } else {
-                alert("MDN: NU! Cookie-ul 'test_mdn' nu a fost găsit.");
+                alert("NU! Cookie-ul 'test_mdn' nu a fost găsit.");
             }
         }
 
@@ -47,16 +47,16 @@
         function mdnCiteste() {
             let valoare = document.cookie.split('; ').find(row => row.startsWith('test_mdn='))?.split('=')[1];
             if (valoare) {
-                alert("MDN: Valoarea găsită este: " + valoare);
+                alert("Valoarea găsită este: " + valoare);
             } else {
-                alert("MDN: Nu pot citi valoarea, cookie-ul nu există.");
+                alert("Nu pot citi valoarea, cookie-ul nu există.");
             }
         }
 
         // 5. Ștergere 
         function mdnSterge() {
             document.cookie = "test_mdn=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-            alert("MDN: Am șters cookie-ul 'test_mdn'!");
+            alert("Am șters cookie-ul 'test_mdn'!");
         }
     </script>
 </head>
