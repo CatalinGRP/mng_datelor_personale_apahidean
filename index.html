@@ -2,78 +2,154 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <title>Lab 8-9: Testare Cookies (Metoda MDN)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 8-9: Interfață Completă Cookies (MDN)</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f4f4f9; }
-        .container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 600px; }
-        button { margin: 5px; padding: 10px 15px; cursor: pointer; border-radius: 5px; border: none; background-color: #0056b3; color: white; font-weight: bold; }
-        button:hover { background-color: #004494; }
-        .btn-delete { background-color: #dc3545; }
-        .btn-delete:hover { background-color: #c82333; }
-        #consola { margin-top: 20px; padding: 15px; background-color: #333; color: #00ff00; font-family: monospace; border-radius: 5px; min-height: 20px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+        }
+        h1 { color: #333; margin-bottom: 10px; }
+        .grid-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+            color: white;
+        }
+        /* Culori butoane */
+        .btn-basic { background-color: #007bff; } /* Task 3 */
+        .btn-mdn { background-color: #6c757d; }   /* MDN Labs */
+        .btn-check { background-color: #28a745; } /* Verificare */
+        .btn-delete { background-color: #dc3545; } /* Ștergere */
+        
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        #console-container {
+            margin-top: 25px;
+            text-align: left;
+        }
+        #console-title { font-weight: bold; font-size: 12px; color: #666; margin-bottom: 5px; text-transform: uppercase; }
+        #consola {
+            background-color: #212529;
+            color: #00ff41;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            border-radius: 6px;
+            min-height: 50px;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+        .footer-note { font-size: 12px; color: #999; margin-top: 20px; }
     </style>
     
     <script>
-        // Funcție de ajutor pentru a scrie mesaje în "consola" de pe pagină
-        function afiseazaMesaj(mesaj) {
-            document.getElementById('consola').innerText = mesaj;
+        // --- TASK 3: Setarea automată la încărcare ---
+        document.cookie = "favorite_task=collect Data; path=/";
+
+        function log(mesaj) {
+            const consola = document.getElementById('consola');
+            consola.innerText = "> " + mesaj;
         }
 
-        // --- EXERCIȚII BAZATE PE GHIDUL MDN ---
+        // --- FUNCȚII BAZATE PE GHIDUL MOZILLA MDN ---
 
-        // 1. CREARE COOKIE
-        function creeazaCookie() {
-            // Setăm un cookie valabil 1 oră (3600 secunde)
-            document.cookie = "student_logat=Da; max-age=3600; path=/";
-            afiseazaMesaj("✅ SUCCES: Cookie-ul 'student_logat' a fost creat!");
+        // A. Citirea tuturor cookie-urilor (Task 3 original)
+        function showAllCookies() {
+            log("document.cookie actual: " + (document.cookie || "Niciun cookie găsit."));
         }
 
-        // 2. VERIFICARE DACĂ EXISTĂ (Metoda din MDN folosind .some)
-        function verificaExistenta() {
-            // MDN ne învață să spargem șirul document.cookie și să verificăm dacă începe cu numele căutat
-            let exista = document.cookie.split('; ').some(item => item.startsWith('student_logat='));
-            
-            if (exista) {
-                afiseazaMesaj("🔍 VERIFICARE: DA! Cookie-ul se află în browser.");
-            } else {
-                afiseazaMesaj("❌ VERIFICARE: NU! Cookie-ul nu există. Poate l-ai șters?");
-            }
+        // B. Scrierea unui cookie simplu (Basic Write)
+        function writeSimple() {
+            document.cookie = "test_mdn=Salut_UTCN";
+            log("Creat: test_mdn=Salut_UTCN (Expiră la închiderea browserului)");
         }
 
-        // 3. CITIREA VALORII EXACTE (Metoda din MDN folosind .find)
-        function citesteValoarea() {
-            // Căutăm exact cookie-ul nostru și îi extragem valoarea de după semnul "="
-            let valoare = document.cookie
-              .split('; ')
-              .find(row => row.startsWith('student_logat='))
-              ?.split('=')[1];
-            
-            if (valoare) {
-                afiseazaMesaj("📖 CITIRE: Valoarea cookie-ului este: " + valoare);
-            } else {
-                afiseazaMesaj("⚠️ EROARE: Nu pot citi valoarea pentru că acest cookie nu există!");
-            }
+        // C. Scrierea cu Path=/ (Accesibil pe tot site-ul)
+        function writeWithPath() {
+            document.cookie = "cale_globala=Activata; path=/";
+            log("Creat: cale_globala=Activata; path=/");
         }
 
-        // 4. ȘTERGEREA COOKIE-ULUI (Metoda din MDN cu data de expirare în trecut)
-        function stergeCookie() {
-            // Ștergerea se face suprascriind cookie-ul cu o dată de expirare din anul 1970
-            document.cookie = "student_logat=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-            afiseazaMesaj("🗑️ ȘTERGERE: Cookie-ul a fost distrus!");
+        // D. Scrierea cu Max-Age (Expiră în 1 minut)
+        function writeWithMaxAge() {
+            document.cookie = "temporar=60secunde; max-age=60; path=/";
+            log("Creat: temporar=60secunde; (Expiră în 60 de secunde)");
+        }
+
+        // E. Verificarea existenței unui cookie (Metoda MDN .some)
+        function checkIfExists() {
+            const nume = "test_mdn";
+            const exista = document.cookie.split("; ").some((item) => item.startsWith(nume + "="));
+            log(exista ? `🔍 Cookie-ul '${nume}' EXISTĂ în browser.` : `🔍 Cookie-ul '${nume}' NU a fost găsit.`);
+        }
+
+        // F. Citirea unei valori specifice (Metoda MDN .find)
+        function getSpecificValue() {
+            const nume = "favorite_task";
+            const valoare = document.cookie
+                .split("; ")
+                .find((row) => row.startsWith(nume + "="))
+                ?.split("=")[1];
+            log(valoare ? `📖 Valoarea pentru '${nume}' este: [${valoare}]` : `📖 Nu am găsit valoare pentru '${nume}'.`);
+        }
+
+        // G. Ștergerea unui cookie (Metoda MDN: setare dată în trecut)
+        function deleteCookie() {
+            document.cookie = "test_mdn=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+            log("🗑️ Cookie-ul 'test_mdn' a fost șters prin suprascriere cu dată expirată.");
         }
     </script>
 </head>
 <body>
+
     <div class="container">
-        <h2>Simulator Cookies (Conform MDN)</h2>
-        <p>Apasă butoanele în ordine pentru a testa ciclul de viață al unui cookie (Creare &rarr; Verificare &rarr; Citire &rarr; Ștergere &rarr; Verificare din nou).</p>
+        <h1>Laborator Managementul Datelor</h1>
+        <p>Interfață interactivă pentru testarea API-ului <code>document.cookie</code></p>
 
-        <button onclick="creeazaCookie()">1. Creează Cookie</button>
-        <button onclick="verificaExistenta()">2. Verifică existența</button>
-        <button onclick="citesteValoarea()">3. Citește valoarea</button>
-        <button class="btn-delete" onclick="stergeCookie()">4. Șterge Cookie-ul</button>
+        <div class="grid-buttons">
+            <button class="btn-basic" onclick="showAllCookies()">1. Show all cookies (Task 3)</button>
+            
+            <button class="btn-mdn" onclick="writeSimple()">2. Scrie Cookie Simplu</button>
+            <button class="btn-mdn" onclick="writeWithPath()">3. Scrie cu Path=/</button>
+            <button class="btn-mdn" onclick="writeWithMaxAge()">4. Scrie cu Max-Age (1 min)</button>
+            
+            <button class="btn-check" onclick="checkIfExists()">5. Verifică 'test_mdn'</button>
+            <button class="btn-check" onclick="getSpecificValue()">6. Citește 'favorite_task'</button>
+            
+            <button class="btn-delete" style="grid-column: span 2;" onclick="deleteCookie()">7. Șterge Cookie-ul 'test_mdn'</button>
+        </div>
 
-        <div id="consola">Aștept comenzi...</div>
+        <div id="console-container">
+            <div id="console-title">Status Consolă</div>
+            <div id="consola">Aștept interacțiune...</div>
+        </div>
+
+        <p class="footer-note">Bazat pe documentația oficială Mozilla MDN Web APIs.</p>
     </div>
+
 </body>
 </html>
