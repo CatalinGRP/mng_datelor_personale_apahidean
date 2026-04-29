@@ -2,63 +2,78 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <title>Lab 8-9: Testare Cookies</title>
+    <title>Lab 8-9: Testare Cookies (Metoda MDN)</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
-        button { margin: 5px; padding: 10px; cursor: pointer; border-radius: 5px; border: 1px solid #333; }
-        .sectiune { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; border-radius: 5px; background-color: #f9f9f9; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f4f4f9; }
+        .container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); max-width: 600px; }
+        button { margin: 5px; padding: 10px 15px; cursor: pointer; border-radius: 5px; border: none; background-color: #0056b3; color: white; font-weight: bold; }
+        button:hover { background-color: #004494; }
+        .btn-delete { background-color: #dc3545; }
+        .btn-delete:hover { background-color: #c82333; }
+        #consola { margin-top: 20px; padding: 15px; background-color: #333; color: #00ff00; font-family: monospace; border-radius: 5px; min-height: 20px; }
     </style>
     
     <script>
-        // --- Task 3 ---
-        document.cookie = "favorite_task=collect Data";
-        
-        function alertCookie() { 
-            alert("Toate cookie-urile curente:\n\n" + document.cookie); 
+        // Funcție de ajutor pentru a scrie mesaje în "consola" de pe pagină
+        function afiseazaMesaj(mesaj) {
+            document.getElementById('consola').innerText = mesaj;
         }
 
-        // --- Exerciții din ghidul Mozilla (MDN) ---
-        
-        // 1. Creare cookie simplu (expiră la închiderea browserului)
-        function setSimpleCookie() {
-            document.cookie = "user=Student_UTCN";
-            alert("Cookie creat cu succes: user=Student_UTCN");
+        // --- EXERCIȚII BAZATE PE GHIDUL MDN ---
+
+        // 1. CREARE COOKIE
+        function creeazaCookie() {
+            // Setăm un cookie valabil 1 oră (3600 secunde)
+            document.cookie = "student_logat=Da; max-age=3600; path=/";
+            afiseazaMesaj("✅ SUCCES: Cookie-ul 'student_logat' a fost creat!");
         }
 
-        // 2. Creare cookie cu valabilitate (max-age în secunde - ex: valabil 1 an)
-        function setMaxAgeCookie() {
-            document.cookie = "tema=dark; max-age=31536000";
-            alert("Cookie creat: tema=dark (Valabil 1 an prin max-age)");
+        // 2. VERIFICARE DACĂ EXISTĂ (Metoda din MDN folosind .some)
+        function verificaExistenta() {
+            // MDN ne învață să spargem șirul document.cookie și să verificăm dacă începe cu numele căutat
+            let exista = document.cookie.split('; ').some(item => item.startsWith('student_logat='));
+            
+            if (exista) {
+                afiseazaMesaj("🔍 VERIFICARE: DA! Cookie-ul se află în browser.");
+            } else {
+                afiseazaMesaj("❌ VERIFICARE: NU! Cookie-ul nu există. Poate l-ai șters?");
+            }
         }
 
-        // 3. Creare cookie cu o dată de expirare exactă (expires)
-        function setExpiresCookie() {
-            document.cookie = "sesiune=activa; expires=Fri, 31 Dec 9999 23:59:59 GMT";
-            alert("Cookie creat: sesiune=activa (Expiră în anul 9999 prin expires)");
+        // 3. CITIREA VALORII EXACTE (Metoda din MDN folosind .find)
+        function citesteValoarea() {
+            // Căutăm exact cookie-ul nostru și îi extragem valoarea de după semnul "="
+            let valoare = document.cookie
+              .split('; ')
+              .find(row => row.startsWith('student_logat='))
+              ?.split('=')[1];
+            
+            if (valoare) {
+                afiseazaMesaj("📖 CITIRE: Valoarea cookie-ului este: " + valoare);
+            } else {
+                afiseazaMesaj("⚠️ EROARE: Nu pot citi valoarea pentru că acest cookie nu există!");
+            }
         }
 
-        // 4. Ștergerea unui cookie (se face setând max-age la 0 sau o dată din trecut)
-        function deleteCookie() {
-            document.cookie = "user=; max-age=0";
-            alert("Cookie-ul 'user' a fost șters!");
+        // 4. ȘTERGEREA COOKIE-ULUI (Metoda din MDN cu data de expirare în trecut)
+        function stergeCookie() {
+            // Ștergerea se face suprascriind cookie-ul cu o dată de expirare din anul 1970
+            document.cookie = "student_logat=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+            afiseazaMesaj("🗑️ ȘTERGERE: Cookie-ul a fost distrus!");
         }
     </script>
 </head>
 <body>
-    <h1>Bine ai venit la lab - Managementul Datelor cu Caracter Personal</h1>
-    <div class="sectiune">
-        <h3>Afișare Cookies</h3>
-        <p>Apasă butonul de mai jos pentru a citi și afișa toate cookie-urile stocate de această pagină.</p>
-        <button onclick="alertCookie()" style="background-color: #e0f7fa;">Show cookies</button>
-    </div>
+    <div class="container">
+        <h2>Simulator Cookies (Conform MDN)</h2>
+        <p>Apasă butoanele în ordine pentru a testa ciclul de viață al unui cookie (Creare &rarr; Verificare &rarr; Citire &rarr; Ștergere &rarr; Verificare din nou).</p>
 
-    <div class="sectiune">
-        <h3>Exerciții practice MDN Web APIs</h3>
-        <button onclick="setSimpleCookie()">Setează Cookie Simplu</button>
-        <button onclick="setMaxAgeCookie()">Setează Cookie cu Max-Age</button>
-        <button onclick="setExpiresCookie()">Setează Cookie cu Expires</button>
-        <br><br>
-        <button onclick="deleteCookie()" style="background-color: #ffcccc;">Șterge Cookie-ul 'user'</button>
+        <button onclick="creeazaCookie()">1. Creează Cookie</button>
+        <button onclick="verificaExistenta()">2. Verifică existența</button>
+        <button onclick="citesteValoarea()">3. Citește valoarea</button>
+        <button class="btn-delete" onclick="stergeCookie()">4. Șterge Cookie-ul</button>
+
+        <div id="consola">Aștept comenzi...</div>
     </div>
 </body>
 </html>
